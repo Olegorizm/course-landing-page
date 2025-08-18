@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Olegorizm - Создаем миры</title>
+    <style>
+        /* Шрифты */
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        /* CSS переменные */
+        :root {
+            --primary-color: #00aaff;
+            --secondary-color: #ff00ff;
+            --accent-color: #00f2ea;
+            --dark-bg: #0a0f2a;
+            --text-color: #e0e0e0;
+            --card-bg: rgba(20, 26, 62, 0.6);
+            --border-color: rgba(0, 170, 255, 0.2);
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        /* Общие стили */
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0f2a 0%, #1a1f3a 50%, #2a2f4a 100%);
+            color: var(--text-color);
+            margin: 0;
+            line-height: 1.6;
+            overflow-x: hidden;
+            font-weight: 400;
+        }
+        .container { 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            padding: 0 20px; 
+            position: relative; 
+            z-index: 2; 
+        }
+        h1, h2, h3 { 
+            font-family: 'Orbitron', sans-serif; 
+            font-weight: 700; 
+            letter-spacing: 1px; 
+            color: #fff; 
+        }
+
+        /* Навигационное меню с улучшенным дизайном */
+        .navbar {
+            background: rgba(10, 15, 42, 0.1);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .navbar.scrolled {
+            background: rgba(10, 15, 42, 0.95);
+            backdrop-filter: blur(25px);
+            padding: 15px 0;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+        }
+        .navbar .container { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        .logo { 
+            font-family: 'Orbitron', sans-serif; 
+            font-size: 2em; 
+            font-weight: 900;
+            color: #fff; 
+            text-decoration: none; 
+            text-shadow: 0 0 20px var(--primary-color);
+            transition: all 0.3s ease;
+        }
+        .logo:hover {
+            text-shadow: 0 0 30px var(--primary-color), 0 0 40px var(--secondary-color);
+            transform: scale(1.05);
+        }
+        .nav-links { 
+            list-style: none; 
+            display: flex; 
+            margin: 0; 
+            padding: 0; 
+            gap: 40px;
+        }
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 1.1em;
+            font-weight: 500;
+            position: relative;
+            transition: all 0.3s ease;
+            padding: 10px 20px;
+            border-radius: 25px;
+        }
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 25px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+        .nav-links a:hover {
+            color: #fff;
+            transform: translateY(-2px);
+        }
+        .nav-links a:hover::before {
+            opacity: 0.2;
+        }
+
+        /* Главный экран с улучшенными эффектами */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-video-bg {
+            position: absolute;
+            top: 50%; 
+            left: 50%; 
+            width: 110%; 
+            height: 110%;
+            object-fit: cover;
+            transform: translate(-50%, -50%) scale(1.1);
+            z-index: -3;
+            filter: brightness(0.4) saturate(1.2);
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            background: radial-gradient(ellipse at center, rgba(10, 15, 42, 0.6) 0%, rgba(10, 15, 42, 0.9) 100%);
+            z-index: -2;
+        }
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .floating-element {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            animation: float 6s infinite ease-in-out;
+            box-shadow: 0 0 10px var(--primary-color);
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+        }
+        
+        #particle-canvas {
+            position: absolute;
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            z-index: 1;
+        }
+        .hero-content { 
+            position: relative; 
+            z-index: 2; 
+            width: 100%; 
+        }
+        
+        /* Улучшенный заголовок с градиентом */
+        .hero h1 {
+            font-size: 6.5em;
+            font-weight: 900;
+            line-height: 1.1;
+            margin: 0 auto 30px;
+            background: linear-gradient(45deg, #fff, var(--primary-color), var(--accent-color), var(--secondary-color));
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-flow 4s ease-in-out infinite;
+        }
+        @keyframes gradient-flow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .hero h1 .letter {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(50px) scale(0.8) rotateX(90deg);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            filter: drop-shadow(0 0 10px rgba(0, 170, 255, 0.5));
+        }
+
+        .hero p.subtitle {
+            font-size: 1.4em;
+            max-width: 700px;
+            margin: 0 auto 50px;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 300;
+            opacity: 0;
+            animation: fadeInUp 1.2s ease-out forwards;
+            animation-delay: 1.5s;
+            line-height: 1.8;
+        }
+
+        /* Премиальная кнопка */
+        .cta-button {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            background-size: 300% 300%;
+            color: #fff;
+            padding: 20px 50px;
+            text-decoration: none;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3em;
+            font-weight: 700;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            box-shadow: 
+                0 0 30px rgba(0, 170, 255, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            display: inline-block;
+            opacity: 0;
+            animation: fadeInUp 1.2s ease-out forwards, pulse-button 3s infinite;
+            animation-delay: 2s;
+        }
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 
+                0 15px 50px rgba(0, 170, 255, 0.6),
+                0 0 50px var(--secondary-color),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            background-position: right center;
+        }
+        .cta-button:hover::before {
+            left: 100%;
+        }
+        
+        @keyframes fadeInUp { 
+            from { opacity: 0; transform: translateY(30px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        @keyframes pulse-button { 
+            0%, 100% { transform: scale(1); } 
+            50% { transform: scale(1.02); } 
+        }
+        
+        .scroll-down-indicator {
+            position: absolute;
+            bottom: 40px; 
+            left: 50%; 
+            transform: translateX(-50%);
+            z-index: 5; 
+            width: 50px; 
+            height: 50px;
+            border: 2px solid rgba(255,255,255,0.6);
+            border-radius: 50%;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .scroll-down-indicator:hover {
+            border-color: var(--primary-color);
+            background: rgba(0, 170, 255, 0.2);
+            transform: translateX(-50%) scale(1.1);
+        }
+        .scroll-down-indicator span { 
+            width: 14px; 
+            height: 14px; 
+            border-bottom: 3px solid rgba(255,255,255,0.8); 
+            border-right: 3px solid rgba(255,255,255,0.8); 
+            transform: rotate(45deg); 
+            animation: bounce-arrow 2s infinite; 
+        }
+        @keyframes bounce-arrow { 
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) rotate(45deg); } 
+            40% { transform: translateY(6px) rotate(45deg); } 
+            60% { transform: translateY(4px) rotate(45deg); } 
+        }
+        
+        /* Улучшенные секции */
+        section { 
+            padding: 120px 0; 
+            position: relative; 
+            overflow: hidden; 
+        }
+        section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 80%, rgba(0, 170, 255, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 0, 255, 0.05) 0%, transparent 50%);
+            z-index: 0;
+        }
+        
+        h2.section-title { 
+            text-align: center; 
+            font-size: 3.5em; 
+            margin-bottom: 80px; 
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color), var(--secondary-color)); 
+            -webkit-background-clip: text; 
+            background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            animation: gradient-text-flow 6s infinite linear; 
+            background-size: 300% 300%;
+            position: relative;
+            z-index: 1;
+        }
+        @keyframes gradient-text-flow { 
+            0% { background-position: 0% 50%; } 
+            50% { background-position: 100% 50%; } 
+            100% { background-position: 0% 50%; } 
+        }
+        
+        /* Улучшенные анимации появления */
+        .reveal { 
+            opacity: 0; 
+            transform: translateY(60px) scale(0.95); 
+            transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+        }
+        .reveal.active { 
+            opacity: 1; 
+            transform: translateY(0) scale(1); 
+        }
+        .reveal.slide-left {
+            transform: translateX(-60px) scale(0.95);
+        }
+        .reveal.slide-left.active {
+            transform: translateX(0) scale(1);
+        }
+        .reveal.slide-right {
+            transform: translateX(60px) scale(0.95);
+        }
+        .reveal.slide-right.active {
+            transform: translateX(0) scale(1);
+        }
+
+        /* О нас секция */
+        #about { 
+            background: linear-gradient(rgba(10, 15, 42, 0.95), rgba(20, 25, 52, 0.95)), 
+                        url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover; 
+            background-position: center; 
+            background-attachment: fixed; 
+            position: relative;
+        }
+        .about-content { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            align-items: center; 
+            gap: 80px; 
+            position: relative;
+            z-index: 1;
+        }
+        .about-text {
+            padding: 40px;
+            background: rgba(20, 26, 62, 0.4);
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .about-text::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            background-size: 200% 100%;
+            animation: gradient-flow 3s ease-in-out infinite;
+        }
+        .about-text h3 {
+            font-size: 2.2em;
+            margin-bottom: 25px;
+            color: var(--accent-color);
+        }
+        .about-text p {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            line-height: 1.8;
+            font-weight: 300;
+        }
+        .about-image { 
+            position: relative;
+        }
+        .about-image img { 
+            width: 100%; 
+            border-radius: 20px; 
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.5),
+                0 0 40px rgba(0, 170, 255, 0.3);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        .about-image:hover img {
+            transform: scale(1.03) rotateY(5deg);
+            box-shadow: 
+                0 30px 80px rgba(0, 0, 0, 0.7),
+                0 0 60px rgba(0, 170, 255, 0.5);
+        }
+
+        /* Услуги секция */
+        #services { 
+            background: linear-gradient(135deg, #0c1130 0%, #1a1f3a 50%, #0c1130 100%);
+            position: relative;
+        }
+        .services-container { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            gap: 40px; 
+            position: relative; 
+            z-index: 1; 
+        }
+        .service-card { 
+            background: rgba(20, 26, 62, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px; 
+            padding: 40px; 
+            text-align: center; 
+            backdrop-filter: blur(15px);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+            position: relative; 
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .service-card::before { 
+            content: ''; 
+            position: absolute; 
+            top: -2px; 
+            left: -2px; 
+            right: -2px; 
+            bottom: -2px;
+            background: conic-gradient(
+                from 0deg,
+                transparent,
+                var(--primary-color),
+                var(--secondary-color),
+                var(--accent-color),
+                transparent 90%
+            ); 
+            border-radius: 20px;
+            animation: border-spin 6s linear infinite; 
+            opacity: 0; 
+            transition: opacity 0.4s; 
+            z-index: -1;
+        }
+        .service-card:hover::before { opacity: 1; }
+        .service-card::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(0, 170, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            transition: all 0.6s ease;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+        }
+        .service-card:hover::after {
+            width: 300px;
+            height: 300px;
+        }
+        @keyframes border-spin { 
+            from { transform: rotate(0deg); } 
+            to { transform: rotate(360deg); } 
+        }
+        .service-card:hover { 
+            transform: translateY(-15px) scale(1.02); 
+            box-shadow: 
+                0 25px 60px rgba(0, 0, 0, 0.4),
+                0 0 40px rgba(0, 170, 255, 0.3);
+            border-color: rgba(0, 170, 255, 0.5);
+        }
+        .service-card .icon-wrapper { 
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); 
+            width: 100px; 
+            height: 100px; 
+            margin: 0 auto 30px; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            box-shadow: 
+                0 0 30px rgba(0, 170, 255, 0.6),
+                inset 0 2px 10px rgba(255, 255, 255, 0.2);
+            transition: all 0.4s ease;
+            position: relative;
+            z-index: 1;
+        }
+        .service-card:hover .icon-wrapper {
+            transform: scale(1.1) rotateY(360deg);
+            box-shadow: 
+                0 0 50px rgba(0, 170, 255, 0.8),
+                0 0 100px rgba(255, 0, 255, 0.4);
+        }
+        .service-card .icon { 
+            width: 50px; 
+            height: 50px; 
+            filter: brightness(0) invert(1); 
+        }
+        .service-card h3 { 
+            font-size: 1.8em; 
+            margin-bottom: 20px; 
+            color: #fff;
+            position: relative;
+            z-index: 1;
+        }
+        .service-card p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.85);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Контакты секция */
+        #contact { 
+            background: linear-gradient(rgba(10, 15, 42, 0.92), rgba(20, 25, 52, 0.92)), 
+                        url('https://images.unsplash.com/photo-1535223289827-42f1e9919769?q=80&w=1887&auto=format=fit=crop');
+            background-size: cover; 
+            background-position: center; 
+            background-attachment: fixed; 
+        }
+        .contact-info { 
+            text-align: center; 
+            font-size: 1.3em;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 60px 40px;
+            background: rgba(20, 26, 62, 0.5);
+            border-radius: 25px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        .contact-info p { 
+            margin-bottom: 25px; 
+            line-height: 1.8;
+        }
+        .contact-info a { 
+            color: var(--primary-color); 
+            text-decoration: none; 
+            transition: all 0.3s ease;
+            padding: 5px 10px;
+            border-radius: 8px;
+        }
+        .contact-info a:hover { 
+            color: var(--accent-color); 
+            text-shadow: 0 0 15px var(--accent-color);
+            background: rgba(0, 170, 255, 0.1);
+        }
+        
+        /* Улучшенный футер */
+        footer { 
+            background: linear-gradient(135deg, #06091c 0%, #0a0f2a 50%, #06091c 100%);
+            padding: 60px 0; 
+            text-align: center; 
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            background-size: 200% 100%;
+            animation: gradient-flow 4s ease-in-out infinite;
+        }
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-bottom: 40px;
+        }
+        .social-item {
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .social-item:hover {
+            transform: translateY(-8px);
+        }
+        .social-item a {
+            color: var(--text-color);
+            font-size: 2.2em;
+            transition: all 0.4s ease;
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+            line-height: 80px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .social-item a:hover { 
+            color: var(--primary-color); 
+            transform: scale(1.2) rotateY(360deg);
+            background: rgba(0, 170, 255, 0.1);
+            box-shadow: 0 0 30px rgba(0, 170, 255, 0.5);
+            border-color: var(--primary-color);
+        }
+        .social-item p {
+            margin-top: 15px;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.8;
+            font-weight: 500;
+        }
+        .footer-text { 
+            margin-top: 40px; 
+            opacity: 0.7;
+            font-size: 1.1em;
+            font-weight: 300;
+        }
+
+        /* Кнопка наверх */
+        #scrollTopBtn { 
+            display: none; 
+            position: fixed; 
+            bottom: 40px; 
+            right: 40px; 
+            z-index: 99; 
+            border: none; 
+            outline: none; 
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white; 
+            cursor: pointer; 
+            padding: 18px; 
+            border-radius: 50%; 
+            width: 60px; 
+            height: 60px; 
+            font-size: 20px; 
+            box-shadow: 
+                0 0 25px rgba(0, 170, 255, 0.6),
+                0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        #scrollTopBtn:hover { 
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+            transform: scale(1.15) translateY(-3px);
+            box-shadow: 
+                0 0 40px rgba(255, 0, 255, 0.8),
+                0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar-track { 
+            background: var(--dark-bg);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb { 
+            background: linear-gradient(var(--primary-color), var(--secondary-color)); 
+            border-radius: 10px;
+            border: 2px solid var(--dark-bg);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(var(--secondary-color), var(--accent-color));
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) { 
+            .nav-links { display: none; } 
+            .hero h1 { font-size: 4em; } 
+            h2.section-title { font-size: 2.8em; } 
+            .about-content { grid-template-columns: 1fr; gap: 50px; } 
+            #about, #contact { background-attachment: scroll; }
+            .social-icons { gap: 40px; }
+            .services-container { grid-template-columns: 1fr; }
+            .container { padding: 0 15px; }
+        }
+        @media (max-width: 480px) { 
+            .hero h1 { font-size: 3.2em; } 
+            .hero p.subtitle { font-size: 1.1em; }
+            .cta-button { padding: 16px 35px; font-size: 1.1em; }
+            .social-icons { gap: 30px; }
+            .social-item a { font-size: 1.8em; width: 60px; height: 60px; line-height: 60px; }
+        }
+
+        /* Дополнительные украшения */
+        .decoration-element {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(0, 170, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float-decoration 8s ease-in-out infinite;
+            z-index: 0;
+        }
+        .decoration-element:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        .decoration-element:nth-child(2) {
+            top: 60%;
+            right: 15%;
+            background: radial-gradient(circle, rgba(255, 0, 255, 0.1) 0%, transparent 70%);
+            animation-delay: 2s;
+        }
+        @keyframes float-decoration {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(180deg); }
+        }
+
+        /* Курсор эффекты */
+        .cursor-follower {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, var(--primary-color), transparent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+            mix-blend-mode: screen;
+        }
+
+        /* Дополнительные микро-анимации */
+        .service-card .icon {
+            transition: all 0.4s ease;
+        }
+        .service-card:hover .icon {
+            filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="cursor-follower"></div>
+    <button id="scrollTopBtn" title="Наверх">&#8679;</button>
+
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="#hero" class="logo">Olegorizm</a>
+            <ul class="nav-links">
+                <li><a href="#about">О студии</a></li>
+                <li><a href="#services">Услуги</a></li>
+                <li><a href="#contact">Контакты</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <header id="hero" class="hero">
+        <video autoplay loop muted playsinline class="hero-video-bg">
+            <source src="https://videos.pexels.com/video-files/8474415/8474415-hd_1920_1080_25fps.mp4" type="video/mp4">
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="floating-elements">
+            <div class="floating-element" style="top: 20%; left: 15%; animation-delay: 0s;"></div>
+            <div class="floating-element" style="top: 40%; right: 20%; animation-delay: 1s;"></div>
+            <div class="floating-element" style="top: 70%; left: 25%; animation-delay: 2s;"></div>
+            <div class="floating-element" style="top: 30%; right: 35%; animation-delay: 3s;"></div>
+            <div class="floating-element" style="top: 80%; right: 15%; animation-delay: 4s;"></div>
+        </div>
+        <canvas id="particle-canvas"></canvas>
+        <div class="container hero-content">
+            <h1 id="hero-headline">Создаем миры</h1>
+            <p class="subtitle">Ваш контент, усиленный искусственным интеллектом, для достижения невероятных результатов.</p>
+            <a href="#contact" class="cta-button">Обсудить проект</a>
+        </div>
+        <a href="#about" class="scroll-down-indicator" aria-label="Scroll down"><span></span></a>
+    </header>
+
+    <main>
+        <section id="about">
+            <div class="decoration-element"></div>
+            <div class="decoration-element"></div>
+            <div class="container">
+                <h2 class="section-title reveal">О Нас</h2>
+                <div class="about-content">
+                    <div class="about-text reveal slide-left">
+                        <h3>Синергия Творчества и Технологий</h3>
+                        <p>«Olegorizm» — это не просто видеопродакшн. Мы — команда креаторов, режиссеров и AI-специалистов, которые объединили искусство и технологии для создания видео нового поколения.</p>
+                        <p>Мы верим, что будущее видеоконтента — за смелыми экспериментами и инновационными решениями. Используя нейросети, мы генерируем уникальные визуальные образы, создаем захватывающие сценарии и оптимизируем производственные процессы.</p>
+                        <p>Каждый проект для нас — это возможность создать что-то уникальное, что не существовало ранее в мире визуального контента.</p>
+                    </div>
+                    <div class="about-image reveal slide-right">
+                        <img src="https://images.unsplash.com/photo-1677442135703-178e31285d03?q=80&w=1932&auto=format&fit=crop" alt="Команда за работой">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="services">
+            <div class="container">
+                <h2 class="section-title reveal">Наши услуги</h2>
+                <div class="services-container">
+                    <div class="service-card reveal">
+                        <div class="icon-wrapper">
+                            <img src="https://www.svgrepo.com/show/493755/artificial-intelligence-technology-outline.svg" alt="Иконка" class="icon">
+                        </div>
+                        <h3>Генеративные клипы</h3>
+                        <p>Создаем завораживающие музыкальные клипы и визуальные миры с помощью передовых нейросетей. Каждый кадр — произведение искусства.</p>
+                    </div>
+                    <div class="service-card reveal">
+                        <div class="icon-wrapper">
+                            <img src="https://www.svgrepo.com/show/428612/brand-marketing-megaphone.svg" alt="Иконка" class="icon">
+                        </div>
+                        <h3>Рекламные ролики</h3>
+                        <p>Разрабатываем креативные рекламные видео, которые привлекают внимание и повышают узнаваемость бренда в цифровую эпоху.</p>
+                    </div>
+                    <div class="service-card reveal">
+                        <div class="icon-wrapper">
+                            <img src="https://www.svgrepo.com/show/450393/play-presentation.svg" alt="Иконка" class="icon">
+                        </div>
+                        <h3>Explainer-видео</h3>
+                        <p>Превращаем сложные идеи в простые и понятные анимированные ролики для стартапов и технологических компаний.</p>
+                    </div>
+                    <div class="service-card reveal">
+                        <div class="icon-wrapper">
+                            <img src="https://www.svgrepo.com/show/505928/voice-waves.svg" alt="Иконка" class="icon">
+                        </div>
+                        <h3>AI-озвучка</h3>
+                        <p>Профессиональная озвучка ваших видео на десятках языков с использованием передовых технологий синтеза речи.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <div class="container reveal">
+                <h2 class="section-title">Свяжитесь с нами</h2>
+                <div class="contact-info">
+                    <p>Готовы воплотить ваши идеи в жизнь? Напишите нам, и мы обсудим ваш проект в деталях.</p>
+                    <p>Email: <a href="mailto:contact@olegorizm.com">contact@olegorizm.com</a></p>
+                    <p>График работы: Пн-Пт, 10:00 - 19:00</p>
+                    <p>Первая консультация — бесплатно</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="social-icons">
+                <div class="social-item">
+                    <a href="#" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+                    <p>Telegram</p>
+                </div>
+                <div class="social-item">
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <p>Instagram</p>
+                </div>
+                <div class="social-item">
+                    <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    <p>YouTube</p>
+                </div>
+            </div>
+            <p class="footer-text">&copy; 2025 Olegorizm Production. Все права защищены.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Улучшенная анимация появления элементов
+        function revealSections() {
+            const reveals = document.querySelectorAll('.reveal');
+            const windowHeight = window.innerHeight;
+            
+            reveals.forEach((element, index) => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 100;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    setTimeout(() => {
+                        element.classList.add('active');
+                    }, index * 100); // Задержка между элементами
+                }
+            });
+        }
+        
+        // Обновление навигации при скролле
+        function updateNavbar() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }
+        
+        window.addEventListener('scroll', () => {
+            revealSections();
+            updateNavbar();
+        });
+        
+        // Кнопка "Наверх"
+        const scrollTopBtn = document.getElementById("scrollTopBtn");
+        window.addEventListener('scroll', () => {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                scrollTopBtn.style.display = "block";
+            } else {
+                scrollTopBtn.style.display = "none";
+            }
+        });
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        });
+
+        // Курсор эффекты
+        document.addEventListener('DOMContentLoaded', () => {
+            const cursorFollower = document.querySelector('.cursor-follower');
+            let mouseX = 0, mouseY = 0;
+            let followerX = 0, followerY = 0;
+            
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+            
+            function animateCursor() {
+                followerX += (mouseX - followerX) * 0.1;
+                followerY += (mouseY - followerY) * 0.1;
+                
+                cursorFollower.style.left = followerX + 'px';
+                cursorFollower.style.top = followerY + 'px';
+                
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
+        });
+
+        // Анимация заголовка
+        document.addEventListener('DOMContentLoaded', () => {
+            const headline = document.getElementById('hero-headline');
+            const text = headline.textContent.trim();
+            headline.innerHTML = '';
+            
+            text.split('').forEach((letter, index) => {
+                const span = document.createElement('span');
+                span.className = 'letter';
+                span.textContent = letter === ' ' ? '\u00A0' : letter;
+                headline.appendChild(span);
+                
+                setTimeout(() => {
+                    span.style.opacity = '1';
+                    span.style.transform = 'translateY(0) scale(1) rotateX(0deg)';
+                }, 150 * index);
+            });
+            
+            revealSections();
+        });
+
+        // Улучшенные интерактивные частицы
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        
+        let particlesArray = [];
+        const mouse = { 
+            x: null, 
+            y: null, 
+            radius: 150 
+        };
+        
+        window.addEventListener('mousemove', event => { 
+            mouse.x = event.x; 
+            mouse.y = event.y; 
+        });
+        
+        window.addEventListener('mouseleave', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+        
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x;
+                this.y = y;
+                this.directionX = directionX;
+                this.directionY = directionY;
+                this.size = size;
+                this.color = color;
+                this.originalSize = size;
+            }
+            
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                
+                // Создаем градиент для частицы
+                const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
+                gradient.addColorStop(0, 'rgba(0, 170, 255, 0.8)');
+                gradient.addColorStop(0.5, 'rgba(0, 242, 234, 0.4)');
+                gradient.addColorStop(1, 'rgba(255, 0, 255, 0.1)');
+                
+                ctx.fillStyle = gradient;
+                ctx.fill();
+                
+                // Добавляем свечение
+                ctx.shadowColor = '#00aaff';
+                ctx.shadowBlur = 15;
+            }
+            
+            update() {
+                // Границы холста
+                if (this.x > canvas.width || this.x < 0) {
+                    this.directionX = -this.directionX;
+                }
+                if (this.y > canvas.height || this.y < 0) {
+                    this.directionY = -this.directionY;
+                }
+                
+                // Взаимодействие с мышью
+                if (mouse.x !== null && mouse.y !== null) {
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < mouse.radius) {
+                        // Увеличиваем размер частицы
+                        this.size = this.originalSize * 2;
+                        
+                        // Отталкиваем частицу
+                        if (mouse.x < this.x && this.x < canvas.width - this.size * 10) {
+                            this.x += 5;
+                        }
+                        if (mouse.x > this.x && this.x > this.size * 10) {
+                            this.x -= 5;
+                        }
+                        if (mouse.y < this.y && this.y < canvas.height - this.size * 10) {
+                            this.y += 5;
+                        }
+                        if (mouse.y > this.y && this.y > this.size * 10) {
+                            this.y -= 5;
+                        }
+                    } else {
+                        // Возвращаем исходный размер
+                        if (this.size > this.originalSize) {
+                            this.size -= 0.1;
+                        }
+                    }
+                }
+                
+                // Движение частицы
+                this.x += this.directionX;
+                this.y += this.directionY;
+                this.draw();
+            }
+        }
+        
+        function initParticles() {
+            particlesArray = [];
+            let numberOfParticles = Math.floor((canvas.height * canvas.width) / 12000);
+            
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 3) + 1;
+                let x = Math.random() * (canvas.width - size * 2) + size;
+                let y = Math.random() * (canvas.height - size * 2) + size;
+                let directionX = (Math.random() * 0.8) - 0.4;
+                let directionY = (Math.random() * 0.8) - 0.4;
+                
+                particlesArray.push(new Particle(x, y, directionX, directionY, size, ''));
+            }
+        }
+        
+        function connectParticles() {
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let dx = particlesArray[a].x - particlesArray[b].x;
+                    let dy = particlesArray[a].y - particlesArray[b].y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 120) {
+                        let opacity = 1 - (distance / 120);
+                        ctx.strokeStyle = `rgba(0, 170, 255, ${opacity * 0.3})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+        
+        function animateParticles() {
+            requestAnimationFrame(animateParticles);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+            }
+            connectParticles();
+        }
+        
+        initParticles();
+        animateParticles();
+        
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            mouse.radius = 150;
+            initParticles();
+        });
+
+        // Плавная прокрутка для навигации
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Добавляем параллакс эффект для фоновых видео
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelector('.hero-video-bg');
+            const speed = scrolled * 0.5;
+            
+            if (parallax) {
+                parallax.style.transform = `translate(-50%, calc(-50% + ${speed}px)) scale(1.1)`;
+            }
+        });
+
+        // Добавляем эффект печатания для подзаголовка
+        function typeWriter(element, text, speed = 50) {
+            let i = 0;
+            element.innerHTML = '';
+            element.style.opacity = '1';
+            
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        // Запускаем эффект печатания после анимации заголовка
+        setTimeout(() => {
+            const subtitle = document.querySelector('.hero p.subtitle');
+            const originalText = subtitle.textContent;
+            typeWriter(subtitle, originalText, 30);
+        }, 2000);
+
+        // Добавляем эффект свечения при наведении на карточки услуг
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.filter = 'brightness(1.1)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.filter = 'brightness(1)';
+            });
+        });
+
+        // Добавляем интерактивность для логотипа
+        document.querySelector('.logo').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>
