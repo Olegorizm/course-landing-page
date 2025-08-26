@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Olegorizm - Создаем миры</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <style>
+        /* === Общие стили и переменные === */
         /* Шрифты */
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
         
@@ -20,6 +23,8 @@
             --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --main-gradient: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            --text-gradient: linear-gradient(45deg, #fff, var(--primary-color), var(--accent-color), var(--secondary-color));
         }
 
         /* Общие стили */
@@ -29,9 +34,10 @@
             background: linear-gradient(135deg, #0a0f2a 0%, #1a1f3a 50%, #2a2f4a 100%);
             color: var(--text-color);
             margin: 0;
-            line-height: 1.6;
+            line-height: 1.7; /* Улучшен межстрочный интервал */
             overflow-x: hidden;
             font-weight: 400;
+            font-size: 16px; /* Базовый размер шрифта */
         }
         .container { 
             max-width: 1400px; 
@@ -45,9 +51,10 @@
             font-weight: 700; 
             letter-spacing: 1px; 
             color: #fff; 
+            line-height: 1.2; /* Улучшен межстрочный интервал для заголовков */
         }
 
-        /* Навигационное меню с улучшенным дизайном */
+        /* === Навигационное меню === */
         .navbar {
             background: rgba(10, 15, 42, 0.1);
             backdrop-filter: blur(20px) saturate(180%);
@@ -72,7 +79,7 @@
         }
         .logo { 
             font-family: 'Orbitron', sans-serif; 
-            font-size: 2em; 
+            font-size: 2.2em; /* Немного увеличен размер логотипа */
             font-weight: 900;
             color: #fff; 
             text-decoration: none; 
@@ -107,7 +114,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            background: var(--main-gradient);
             border-radius: 25px;
             opacity: 0;
             transition: opacity 0.3s ease;
@@ -121,7 +128,7 @@
             opacity: 0.2;
         }
 
-        /* Главный экран с улучшенными эффектами */
+        /* === Главный экран (Hero) === */
         .hero {
             height: 100vh;
             display: flex;
@@ -189,11 +196,11 @@
         
         /* Улучшенный заголовок с градиентом */
         .hero h1 {
-            font-size: 6.5em;
+            font-size: 6.8em; /* Немного увеличен размер заголовка */
             font-weight: 900;
             line-height: 1.1;
             margin: 0 auto 30px;
-            background: linear-gradient(45deg, #fff, var(--primary-color), var(--accent-color), var(--secondary-color));
+            background: var(--text-gradient);
             background-size: 400% 400%;
             -webkit-background-clip: text;
             background-clip: text;
@@ -214,7 +221,7 @@
         }
 
         .hero p.subtitle {
-            font-size: 1.4em;
+            font-size: 1.5em; /* Немного увеличен размер подзаголовка */
             max-width: 700px;
             margin: 0 auto 50px;
             color: rgba(255, 255, 255, 0.9);
@@ -227,7 +234,7 @@
 
         /* Премиальная кнопка */
         .cta-button {
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            background: var(--main-gradient);
             background-size: 300% 300%;
             color: #fff;
             padding: 20px 50px;
@@ -316,7 +323,7 @@
             60% { transform: translateY(4px) rotate(45deg); } 
         }
         
-        /* Улучшенные секции */
+        /* === Общие стили секций === */
         section { 
             padding: 120px 0; 
             position: relative; 
@@ -335,10 +342,10 @@
         }
         
         h2.section-title { 
+            font-size: 3.8em; /* Немного увеличен размер заголовка секции */
             text-align: center; 
-            font-size: 3.5em; 
             margin-bottom: 80px; 
-            background: linear-gradient(45deg, var(--primary-color), var(--accent-color), var(--secondary-color)); 
+            background: var(--text-gradient); 
             -webkit-background-clip: text; 
             background-clip: text; 
             -webkit-text-fill-color: transparent; 
@@ -376,7 +383,7 @@
             transform: translateX(0) scale(1);
         }
 
-        /* О нас секция */
+        /* === Секция "О нас" === */
         #about { 
             background: linear-gradient(rgba(10, 15, 42, 0.95), rgba(20, 25, 52, 0.95)), 
                         url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070&auto=format&fit=crop');
@@ -409,17 +416,17 @@
             left: 0;
             right: 0;
             height: 3px;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            background: var(--main-gradient);
             background-size: 200% 100%;
             animation: gradient-flow 3s ease-in-out infinite;
         }
         .about-text h3 {
-            font-size: 2.2em;
+            font-size: 2.4em; /* Немного увеличен размер подзаголовка секции "О нас" */
             margin-bottom: 25px;
             color: var(--accent-color);
         }
         .about-text p {
-            font-size: 1.1em;
+            font-size: 1.15em; /* Немного увеличен размер текста */
             margin-bottom: 20px;
             line-height: 1.8;
             font-weight: 300;
@@ -442,7 +449,7 @@
                 0 0 60px rgba(0, 170, 255, 0.5);
         }
 
-        /* Услуги секция */
+        /* === Секция "Наши услуги" === */
         #services { 
             background: linear-gradient(135deg, #0c1130 0%, #1a1f3a 50%, #0c1130 100%);
             position: relative;
@@ -499,7 +506,7 @@
             animation: pulse-glow 2s infinite;
         }
         .service-card .icon-wrapper { 
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); 
+            background: var(--main-gradient); 
             width: 100px; 
             height: 100px; 
             margin: 0 auto 30px; 
@@ -526,21 +533,21 @@
             filter: brightness(0) invert(1); 
         }
         .service-card h3 { 
-            font-size: 1.8em; 
+            font-size: 2em; /* Немного увеличен размер заголовка услуги */
             margin-bottom: 20px; 
             color: #fff;
             position: relative;
             z-index: 1;
         }
         .service-card p {
-            font-size: 1.1em;
+            font-size: 1.15em; /* Немного увеличен размер текста услуги */
             line-height: 1.8;
             color: rgba(255, 255, 255, 0.85);
             position: relative;
             z-index: 1;
         }
 
-        /* Контакты секция */
+        /* === Секция "Контакты" === */
         #contact { 
             background: linear-gradient(rgba(10, 15, 42, 0.92), rgba(20, 25, 52, 0.92)), 
                         url('https://images.unsplash.com/photo-1535223289827-42f1e9919769?q=80&w=1887&auto=format=fit=crop');
@@ -561,6 +568,7 @@
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
         .contact-info p { 
+            font-size: 1.15em; /* Немного увеличен размер текста контактов */
             margin-bottom: 25px; 
             line-height: 1.8;
         }
@@ -577,7 +585,7 @@
             background: rgba(0, 170, 255, 0.1);
         }
         
-        /* Улучшенный футер */
+        /* === Футер === */
         footer { 
             background: linear-gradient(135deg, #06091c 0%, #0a0f2a 50%, #06091c 100%);
             padding: 60px 0; 
@@ -592,7 +600,7 @@
             left: 0;
             right: 0;
             height: 3px;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            background: var(--main-gradient);
             background-size: 200% 100%;
             animation: gradient-flow 4s ease-in-out infinite;
         }
@@ -621,6 +629,7 @@
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: social-icon-pulse 2s infinite ease-in-out; /* Добавлена анимация */
         }
         .social-item a:hover { 
             color: var(--primary-color); 
@@ -631,7 +640,7 @@
         }
         .social-item p {
             margin-top: 15px;
-            font-size: 0.95em;
+            font-size: 1em; /* Немного увеличен размер текста в футере */
             text-transform: uppercase;
             letter-spacing: 2px;
             opacity: 0.8;
@@ -644,7 +653,14 @@
             font-weight: 300;
         }
 
-        /* Кнопка наверх */
+        /* Анимация для социальных иконок */
+        @keyframes social-icon-pulse {
+            0% { transform: scale(1); box-shadow: 0 0 15px rgba(0, 170, 255, 0.3); }
+            50% { transform: scale(1.05); box-shadow: 0 0 25px rgba(0, 170, 255, 0.6); }
+            100% { transform: scale(1); box-shadow: 0 0 15px rgba(0, 170, 255, 0.3); }
+        }
+
+        /* === Кнопка "Наверх" === */
         #scrollTopBtn { 
             display: none; 
             position: fixed; 
@@ -653,7 +669,7 @@
             z-index: 99; 
             border: none; 
             outline: none; 
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            background: var(--main-gradient);
             color: white; 
             cursor: pointer; 
             padding: 18px; 
@@ -675,7 +691,7 @@
                 0 15px 40px rgba(0, 0, 0, 0.4);
         }
 
-        /* Scrollbar */
+        /* === Стилизация скроллбара === */
         ::-webkit-scrollbar { width: 12px; }
         ::-webkit-scrollbar-track { 
             background: var(--dark-bg);
@@ -690,7 +706,7 @@
             background: linear-gradient(var(--secondary-color), var(--accent-color));
         }
 
-        /* Адаптивность */
+        /* === Адаптивность === */
         @media (max-width: 768px) { 
             .nav-links { display: none; } 
             .hero h1 { font-size: 4em; } 
@@ -709,7 +725,7 @@
             .social-item a { font-size: 1.8em; width: 60px; height: 60px; line-height: 60px; }
         }
 
-        /* Дополнительные украшения */
+        /* === Дополнительные украшения и эффекты === */
         .decoration-element {
             position: absolute;
             width: 200px;
@@ -762,50 +778,51 @@
     <div class="cursor-follower"></div>
     <button id="scrollTopBtn" title="Наверх">&#8679;</button>
 
-    <nav class="navbar" id="navbar">
+    <nav class="navbar" id="navbar" role="navigation" aria-label="Главная навигация">
         <div class="container">
-            <a href="#hero" class="logo">Olegorizm</a>
-            <ul class="nav-links">
-                <li><a href="#about">О студии</a></li>
-                <li><a href="#services">Услуги</a></li>
-                <li><a href="#contact">Контакты</a></li>
+            <a href="#hero" class="logo" aria-label="Перейти на главный экран">Olegorizm</a>
+            <ul class="nav-links" role="menu">
+                <li role="menuitem"><a href="#about">О студии</a></li>
+                <li role="menuitem"><a href="#services">Услуги</a></li>
+                <li role="menuitem"><a href="#contact">Контакты</a></li>
             </ul>
         </div>
     </nav>
     
-    <header id="hero" class="hero">
-        <video autoplay loop muted playsinline class="hero-video-bg">
+    <header id="hero" class="hero" role="banner">
+        <video autoplay loop muted playsinline class="hero-video-bg" poster="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070&auto=format&fit=crop" aria-label="Фоновое видео">
             <source src="https://videos.pexels.com/video-files/8474415/8474415-hd_1920_1080_25fps.mp4" type="video/mp4">
         </video>
         <div class="hero-overlay"></div>
-        <div class="floating-elements">
+        <div class="floating-elements" aria-hidden="true">
             <div class="floating-element" style="top: 20%; left: 15%; animation-delay: 0s;"></div>
             <div class="floating-element" style="top: 40%; right: 20%; animation-delay: 1s;"></div>
             <div class="floating-element" style="top: 70%; left: 25%; animation-delay: 2s;"></div>
             <div class="floating-element" style="top: 30%; right: 35%; animation-delay: 3s;"></div>
             <div class="floating-element" style="top: 80%; right: 15%; animation-delay: 4s;"></div>
         </div>
-        <canvas id="particle-canvas"></canvas>
+        <canvas id="particle-canvas" aria-hidden="true"></canvas>
         <div class="container hero-content">
             <h1 id="hero-headline">Создаем миры</h1>
             <p class="subtitle">Ваш контент, усиленный искусственным интеллектом, для достижения невероятных результатов.</p>
-            <a href="#contact" class="cta-button">Обсудить проект</a>
+            <a href="#contact" class="cta-button" role="button">Обсудить проект</a>
         </div>
-        <a href="#about" class="scroll-down-indicator" aria-label="Scroll down"><span></span></a>
+        <a href="#about" class="scroll-down-indicator" aria-label="Прокрутить вниз к секции О студии"><span></span></a>
     </header>
 
-    <main>
-        <section id="about">
-            <div class="decoration-element"></div>
-            <div class="decoration-element"></div>
+    <main role="main">
+        <section id="about" aria-labelledby="about-title">
+            <div class="decoration-element" aria-hidden="true"></div>
+            <div class="decoration-element" aria-hidden="true"></div>
             <div class="container">
-                <h2 class="section-title reveal">О Нас</h2>
+                <h2 class="section-title reveal" id="about-title">О Нас</h2>
                 <div class="about-content">
                     <div class="about-text reveal slide-left">
                         <h3>Синергия Творчества и Технологий</h3>
                         <p>«Olegorizm» — это не просто видеопродакшн. Мы — команда креаторов, режиссеров и AI-специалистов, которые объединили искусство и технологии для создания видео нового поколения.</p>
                         <p>Мы верим, что будущее видеоконтента — за смелыми экспериментами и инновационными решениями. Используя нейросети, мы генерируем уникальные визуальные образы, создаем захватывающие сценарии и оптимизируем производственные процессы.</p>
                         <p>Каждый проект для нас — это возможность создать что-то уникальное, что не существовало ранее в мире визуального контента.</p>
+                        <a href="#contact" class="cta-button" role="button" style="margin-top: 30px;">Обсудить проект</a>
                     </div>
                     <div class="about-image reveal slide-right">
                         <img src="https://images.unsplash.com/photo-1677442135703-178e31285d03?q=80&w=1932&auto=format&fit=crop" alt="Команда за работой">
@@ -814,34 +831,34 @@
             </div>
         </section>
 
-        <section id="services">
+        <section id="services" aria-labelledby="services-title">
             <div class="container">
-                <h2 class="section-title reveal">Наши услуги</h2>
+                <h2 class="section-title reveal" id="services-title">Наши услуги</h2>
                 <div class="services-container">
                     <div class="service-card reveal">
                         <div class="icon-wrapper">
-                            <img src="https://www.svgrepo.com/show/493755/artificial-intelligence-technology-outline.svg" alt="Иконка" class="icon">
+                            <i class="fas fa-robot icon"></i>
                         </div>
                         <h3>Генеративные клипы</h3>
                         <p>Создаем завораживающие музыкальные клипы и визуальные миры с помощью передовых нейросетей. Каждый кадр — произведение искусства.</p>
                     </div>
                     <div class="service-card reveal">
                         <div class="icon-wrapper">
-                            <img src="https://www.svgrepo.com/show/428612/brand-marketing-megaphone.svg" alt="Иконка" class="icon">
+                            <i class="fas fa-bullhorn icon"></i>
                         </div>
                         <h3>Рекламные ролики</h3>
                         <p>Разрабатываем креативные рекламные видео, которые привлекают внимание и повышают узнаваемость бренда в цифровую эпоху.</p>
                     </div>
                     <div class="service-card reveal">
                         <div class="icon-wrapper">
-                            <img src="https://www.svgrepo.com/show/450393/play-presentation.svg" alt="Иконка" class="icon">
+                            <i class="fas fa-video icon"></i>
                         </div>
                         <h3>Explainer-видео</h3>
                         <p>Превращаем сложные идеи в простые и понятные анимированные ролики для стартапов и технологических компаний.</p>
                     </div>
                     <div class="service-card reveal">
                         <div class="icon-wrapper">
-                            <img src="https://www.svgrepo.com/show/505928/voice-waves.svg" alt="Иконка" class="icon">
+                            <i class="fas fa-microphone-alt icon"></i>
                         </div>
                         <h3>AI-озвучка</h3>
                         <p>Профессиональная озвучка ваших видео на десятках языков с использованием передовых технологий синтеза речи.</p>
@@ -850,9 +867,9 @@
             </div>
         </section>
 
-        <section id="contact">
+        <section id="contact" aria-labelledby="contact-title">
             <div class="container reveal">
-                <h2 class="section-title">Свяжитесь с нами</h2>
+                <h2 class="section-title" id="contact-title">Свяжитесь с нами</h2>
                 <div class="contact-info">
                     <p>Готовы воплотить ваши идеи в жизнь? Напишите нам, и мы обсудим ваш проект в деталях.</p>
                     <p>Email: <a href="mailto:contact@olegorizm.com">contact@olegorizm.com</a></p>
@@ -863,19 +880,19 @@
         </section>
     </main>
 
-    <footer>
+    <footer role="contentinfo">
         <div class="container">
             <div class="social-icons">
                 <div class="social-item">
-                    <a href="#" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+                    <a href="https://t.me/olegorizm" target="_blank" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
                     <p>Telegram</p>
                 </div>
                 <div class="social-item">
-                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://instagram.com/olegorizm" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                     <p>Instagram</p>
                 </div>
                 <div class="social-item">
-                    <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    <a href="https://youtube.com/olegorizm" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
                     <p>YouTube</p>
                 </div>
             </div>
@@ -884,6 +901,8 @@
     </footer>
     
     <script>
+        // === Скрипты для улучшения производительности и доступности ===
+
         // Улучшенная анимация появления элементов
         function revealSections() {
             const reveals = document.querySelectorAll('.reveal');
